@@ -59,7 +59,7 @@ function Footer() {
                 Twitter
               </p>
               <p className="font-inter font-medium text-[14px] text-[#FAFAFA]">
-                Youtube
+                Youtuberr
               </p>
             </div>
           </div>
