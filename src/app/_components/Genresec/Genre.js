@@ -5,7 +5,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -13,17 +12,17 @@ import {
 export default function Genre() {
   return (
     <div className="relative">
-      <NavigationMenu>
+      <NavigationMenu viewport={false}>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="w-[90px] h-[38px] flex items-center justify-center border border-gray-200 rounded-md hover:bg-gray-50 relative z-50 dark:border-slate-800 dark:hover:bg-slate-900 dark:text-slate-100">
               Genre
             </NavigationMenuTrigger>
 
-            <NavigationMenuContent className="absolute mt-2 w-[980px] max-w-[calc(100vw-2rem)] rounded-2xl border border-gray-200 bg-white p-6 shadow-xl z-50 dark:border-slate-800 dark:bg-slate-950">
-              <NavigationMenuLink>
+            <NavigationMenuContent className="absolute left-0 mt-2 w-[360px] sm:w-[520px] md:w-[640px] max-w-[calc(100vw-2rem)] rounded-2xl border border-gray-200 bg-white p-6 shadow-xl z-50 dark:border-slate-800 dark:bg-slate-950">
+              <div className="w-full">
                 <GenreList />
-              </NavigationMenuLink>
+              </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>

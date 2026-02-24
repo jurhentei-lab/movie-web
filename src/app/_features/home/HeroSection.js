@@ -149,7 +149,7 @@ function HeroSection() {
 
         <button
           onClick={handlePrevious}
-          className="absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black shadow hover:bg-white disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:bg-slate-900"
+          className="absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-transparent text-white hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Previous"
           disabled={heroList.length === 0}
         >
@@ -157,7 +157,7 @@ function HeroSection() {
         </button>
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black shadow hover:bg-white disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:bg-slate-900"
+          className="absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-transparent text-white hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Next"
           disabled={heroList.length === 0}
         >

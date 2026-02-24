@@ -91,7 +91,6 @@ export default function MoviePage() {
       </div>
     );
   }
-  const img_url = `https://image.tmdb.org/t/p/original${movieDetails.backdrop_path}`;
   const poster_url = `https://image.tmdb.org/t/p/original${movieDetails.poster_path}`;
   const releaseDate = movieDetails.release_date
     ? movieDetails.release_date.replaceAll("-", ".")
@@ -144,11 +143,15 @@ export default function MoviePage() {
               alt={movieDetails.title}
               className="h-[420px] w-full rounded-lg object-cover"
             />
-            <img
-              src={img_url}
-              alt={movieDetails.title}
-              className="h-[420px] w-full rounded-lg object-cover"
-            />
+            <div className="h-[420px] w-full overflow-hidden rounded-lg bg-black">
+              <Trailer
+                movieId={key}
+                className="flex h-full w-full items-center justify-center p-0"
+                playerClassName="h-full w-full rounded-lg"
+                loadingClassName="text-sm text-white/90"
+                emptyClassName="text-sm text-white/80"
+              />
+            </div>
           </div>
         </div>
 
