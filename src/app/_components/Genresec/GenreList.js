@@ -55,9 +55,9 @@ export default function GenreList() {
             <button
               key={genre.id}
               onClick={() => handleGenreClick(genre.name)}
-              className="focus:outline-none"
+              className="cursor-pointer focus:outline-none"
             >
-              <Badge className="flex w-full items-center justify-between gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-left text-sm font-semibold leading-[16px] text-[rgba(9,9,11,1)] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100">
+              <Badge className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-left text-sm font-semibold leading-[16px] text-[rgba(9,9,11,1)] hover:bg-gray-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
                 {genre.name}
                 <ChevronRightIcon />
               </Badge>
