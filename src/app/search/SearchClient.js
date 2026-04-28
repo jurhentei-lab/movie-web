@@ -6,6 +6,8 @@ import Moviecard from "@/app/_components/Moviecard";
 import Header from "@/app/_features/Header";
 import Footer from "@/app/_features/Footer";
 import Skeleton from "@/components/ui/skeleton";
+import { getVisiblePages } from "@/lib/pagination";
+import { TMDB_BASE_URL, getTmdbFetchOptions } from "@/lib/tmdb";
 import {
   Pagination,
   PaginationContent,
@@ -15,10 +17,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-const BASE_URL = "https://api.themoviedb.org/3";
-const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjI5ZmNiMGRmZTNkMzc2MWFmOWM0YjFjYmEyZTg1NiIsIm5iZiI6MTc1OTcxMTIyNy43OTAwMDAyLCJzdWIiOiI2OGUzMGZmYjFlN2Y3MjAxYjI5Y2FiYmIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.M0DQ3rCdsWnMw8U-8g5yGXx-GAa00Jp3p11eRyiSxCuY";
 
 export default function SearchClient() {
   const searchParams = useSearchParams();
@@ -48,17 +46,17 @@ export default function SearchClient() {
         setLoading(true);
         setError("");
         const res = await fetch(
-          `${BASE_URL}/search/movie?query=${encodeURIComponent(
+          `${TMDB_BASE_URL}/search/movie?query=${encodeURIComponent(
             query
           )}&language=en-US&page=${pageNumber}`,
-          {
-            headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
-          }
+          getTmdbFetchOptions()
         );
-        if (!res.ok) throw new Error("Search failed");
+        if (!res.ok) {
+          throw new Error(`Search failed with status ${res.status}`);
+        }
         const data = await res.json();
         setResults(data.results || []);
-        setTotalPages(data.total_pages || 1);
+        setTotalPages(Math.max(1, Math.min(data.total_pages || 1, 500)));
       } catch (err) {
         console.error(err);
         setError("Search failed. Try again.");
@@ -129,51 +127,45 @@ export default function SearchClient() {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
+                        if (pageNumber === 1) return;
                         setPageNumber((prev) => Math.max(1, prev - 1));
                       }}
-                      disabled={pageNumber === 1}
+                      aria-disabled={pageNumber === 1}
+                      className={pageNumber === 1 ? "pointer-events-none opacity-50" : ""}
                     />
                   </PaginationItem>
 
-                  {Array.from({ length: totalPages }).map((_, index) => {
-                    const page = index + 1;
-
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= pageNumber - 1 && page <= pageNumber + 1)
-                    ) {
-                      return (
-                        <PaginationItem key={page}>
-                          <PaginationLink
-                            href="#"
-                            isActive={page === pageNumber}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setPageNumber(page);
-                            }}
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    } else if (
-                      page === pageNumber - 2 ||
-                      page === pageNumber + 2
-                    ) {
-                      return <PaginationEllipsis key={`ellipsis-${page}`} />;
-                    }
-                    return null;
-                  })}
+                  {getVisiblePages(pageNumber, totalPages).map((item, index) =>
+                    item === "ellipsis" ? (
+                      <PaginationEllipsis key={`ellipsis-${index}`} />
+                    ) : (
+                      <PaginationItem key={item}>
+                        <PaginationLink
+                          href="#"
+                          isActive={item === pageNumber}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPageNumber(item);
+                          }}
+                        >
+                          {item}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  )}
 
                   <PaginationItem>
                     <PaginationNext
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
+                        if (pageNumber === totalPages) return;
                         setPageNumber((prev) => Math.min(totalPages, prev + 1));
                       }}
-                      disabled={pageNumber === totalPages}
+                      aria-disabled={pageNumber === totalPages}
+                      className={
+                        pageNumber === totalPages ? "pointer-events-none opacity-50" : ""
+                      }
                     />
                   </PaginationItem>
                 </PaginationContent>
