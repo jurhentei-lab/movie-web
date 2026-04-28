@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import Vector from "../_icons/VectorIcon";
 import Search from "../_icons/SearchIcon";
@@ -11,6 +11,7 @@ import Genre from "../_components/Genresec/Genre";
 function Header() {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -24,10 +25,21 @@ function Header() {
     document.documentElement.classList.toggle("dark", prefersDark);
   }, []);
 
-  const handleSearch = () => {
-    if (!query.trim()) return;
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setQuery(params.get("query") || "");
+  }, [pathname]);
 
-    router.push(`/search?query=${encodeURIComponent(query)}`);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      router.push("/search");
+      return;
+    }
+
+    router.push(`/search?query=${encodeURIComponent(trimmedQuery)}`);
   };
 
   const toggleTheme = () => {
@@ -51,8 +63,11 @@ function Header() {
         <div className="flex w-full max-w-[640px] items-center gap-3">
           <Genre />
 
-          <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200">
-            <button onClick={handleSearch} aria-label="Search">
+          <form
+            className="flex h-10 w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200"
+            onSubmit={handleSearch}
+          >
+            <button type="submit" aria-label="Search">
               <Search />
             </button>
 
@@ -62,13 +77,8 @@ function Header() {
               placeholder="Search movies..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
             />
-          </div>
+          </form>
         </div>
 
           <button

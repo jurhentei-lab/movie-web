@@ -35,7 +35,13 @@ export default function SearchClient() {
   }, [query]);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query) {
+      setResults([]);
+      setError("");
+      setTotalPages(1);
+      setLoading(false);
+      return;
+    }
 
     const fetchResults = async () => {
       try {
